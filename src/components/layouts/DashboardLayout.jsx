@@ -22,7 +22,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import Sidebar from "../common/other/Sidebar";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme }) => ({
