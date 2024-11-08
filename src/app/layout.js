@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Theme from "@/theme";
 import { ReduxProvider } from "@/store/ReduxProvider";
+import SnackbarNotify from "@/components/common/SnackbarNotify";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ReduxProvider>
           <Theme>{children}</Theme>
+          <SnackbarNotify/>
         </ReduxProvider>
       </body>
     </html>
