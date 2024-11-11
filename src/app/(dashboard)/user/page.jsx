@@ -34,7 +34,7 @@ import AddButton from "@/components/common/button/AddButton";
 import Link from "next/link";
 import ConfirmDialog from "@/components/common/dialog/ConfirmDialog";
 import useDeleteWithConfirm from "@/hooks/useDeleteWithConfirm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useShowSnackbar from "@/hooks/useShowSnackbar";
 
 const breadcrumb = [
@@ -132,11 +132,23 @@ const headers = ["User", "email", "Role", "Status"];
 
 export default function Page() {
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [rows, setRows] = useState([]);
+
   const { showSuccessSnackbar } = useShowSnackbar();
+
   const handleDelete = () => {
     showSuccessSnackbar("delete user successfully");
     setOpenConfirm(false);
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRows(users);
+      setIsFetching(false)
+    }, 500);
+  }, []);
+
   return (
     <PageWrapper
       title={"User List"}
@@ -167,8 +179,17 @@ export default function Page() {
           <SearchInput width={"350px"} placeholder={"Search name or id ..."} />
         </Box>
 
-        <MainTable headers={headers}>
-          {users?.map((row) => (
+        <MainTable
+          headers={headers}
+          hasPagination={true}
+          page={1}
+          rowsPerPage={10}
+          handlePageChange={() => alert("page has change")}
+          handleRowsPerPageChange={() => alert("limit has change")}
+          isFetching={isFetching}
+          totalData={10}
+        >
+          {rows?.map((row) => (
             <TableRow
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -198,13 +219,14 @@ export default function Page() {
               <TableCell>
                 <DatatableActionButton>
                   {/* create a custom component for menu item */}
-                  <Link href={'/user/create'}>
-                  <MenuItem>
-                    <ListItemIcon>
-                      <Edit fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Edit</ListItemText>
-                  </MenuItem></Link>
+                  <Link href={"/user/create"}>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Edit fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Edit</ListItemText>
+                    </MenuItem>
+                  </Link>
                   <MenuItem onClick={() => setOpenConfirm(true)}>
                     <ListItemIcon>
                       <Delete fontSize="small" />
@@ -216,16 +238,8 @@ export default function Page() {
             </TableRow>
           ))}
         </MainTable>
-
-        <TablePagination
-          component="div"
-          count={100}
-          page={1}
-          onPageChange={() => console.log("oke")}
-          rowsPerPage={10}
-          onRowsPerPageChange={() => console.log("oke")}
-        />
       </Card>
+
       <ConfirmDialog
         title={"Delete User"}
         description={

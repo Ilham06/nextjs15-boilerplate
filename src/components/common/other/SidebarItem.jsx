@@ -16,16 +16,28 @@ import { ExpandMore, KeyboardArrowRight } from "@mui/icons-material";
 export default function SidebarItem({ sidebar }) {
   const [openExpand, setOpenExpand] = React.useState(false);
   const pathname = usePathname();
-  const router = useRouter()
-  const isMenuSelected = () => pathname.includes(sidebar.path);
+  const router = useRouter();
+  const isMenuSelected = () => {
+    if (sidebar.path === "/") {
+      return pathname === "/";
+    } else {
+      return pathname.startsWith(sidebar.path);
+    }
+  };
 
   const handleClick = () => {
-    return sidebar.hasChild ? setOpenExpand(!openExpand) : router.push(sidebar.path);
+    return sidebar.hasChild
+      ? setOpenExpand(!openExpand)
+      : router.push(sidebar.path);
   };
 
   return (
-    <ListItem disablePadding sx={{ mb: 1, px: 2, display: 'block' }}>
-      <ListItemButton selected={isMenuSelected()} onClick={handleClick} sx={{borderRadius: 2}}>
+    <ListItem disablePadding sx={{ mb: 1, px: 2, display: "block" }}>
+      <ListItemButton
+        selected={isMenuSelected()}
+        onClick={handleClick}
+        sx={{ borderRadius: 2 }}
+      >
         <ListItemIcon
           sx={{
             minWidth: 0,
@@ -38,13 +50,7 @@ export default function SidebarItem({ sidebar }) {
         </ListItemIcon>
         <ListItemText primary={sidebar.label} />
         {sidebar.hasChild && (
-          <>
-            {!openExpand ? (
-              <KeyboardArrowRight/>
-            ) : (
-              <ExpandMore/>
-            )}
-          </>
+          <>{!openExpand ? <KeyboardArrowRight /> : <ExpandMore />}</>
         )}
       </ListItemButton>
       {sidebar.hasChild && (
