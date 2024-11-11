@@ -144,7 +144,7 @@ export default function DashboardLayout({ children }) {
             )}
           </IconButton>
         </DrawerHeader>
-        <Divider />
+        {/* <Divider /> */}
         <Sidebar/>
       </Drawer>
       <Main open={open}>

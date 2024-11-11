@@ -20,22 +20,22 @@ const sidebarMenu = [
     icon: PeopleTwoTone,
   },
   {
-    label: "Role Management",
-    path: "/role-management",
+    label: "Nested Menu",
+    path: "/nested-menu",
     isChild: false,
     hasChild: true,
     icon: LockTwoTone,
     children: [
       {
-        label: "Role",
-        path: "/role",
+        label: "Sub menu 1",
+        path: "/1",
         isChild: true,
         hasChild: false,
         icon: PeopleTwoTone,
       },
       {
-        label: "Permission",
-        path: "/permission",
+        label: "Sub menu 2",
+        path: "/2",
         isChild: true,
         hasChild: false,
         icon: PeopleTwoTone,
