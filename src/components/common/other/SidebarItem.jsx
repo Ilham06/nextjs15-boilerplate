@@ -25,7 +25,7 @@ export default function SidebarItem({ sidebar }) {
 
   return (
     <ListItem disablePadding sx={{ mb: 1, px: 2, display: 'block' }}>
-      <ListItemButton selected={isMenuSelected()} onClick={handleClick}>
+      <ListItemButton selected={isMenuSelected()} onClick={handleClick} sx={{borderRadius: 2}}>
         <ListItemIcon
           sx={{
             minWidth: 0,

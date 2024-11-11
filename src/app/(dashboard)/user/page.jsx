@@ -9,7 +9,6 @@ import {
   FormControl,
   IconButton,
   InputLabel,
-  Link,
   ListItemIcon,
   ListItemText,
   MenuItem,
@@ -32,6 +31,11 @@ import SearchInput from "@/components/common/form/SearchInput";
 import DatatableActionButton from "@/components/common/table/DatatableActionButton";
 import PageWrapper from "@/components/layouts/PageWrapper";
 import AddButton from "@/components/common/button/AddButton";
+import Link from "next/link";
+import ConfirmDialog from "@/components/common/dialog/ConfirmDialog";
+import useDeleteWithConfirm from "@/hooks/useDeleteWithConfirm";
+import { useState } from "react";
+import useShowSnackbar from "@/hooks/useShowSnackbar";
 
 const breadcrumb = [
   {
@@ -126,89 +130,112 @@ const users = [
 
 const headers = ["User", "email", "Role", "Status"];
 
-const renderRows = () => {
-  return users?.map((row) => (
-    <TableRow
-      key={row.id}
-      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-    >
-      <TableCell component="th" scope="row">
-        <Box display={"flex"} alignItems={"center"} gap={1.5}>
-          <Avatar sx={{ width: 40, height: 40 }} />
-          <Box>
-            <Typography fontSize={14} fontWeight={600}>
-              {row.name}
-            </Typography>
-            <Typography fontSize={12} color="text.secondary">
-              {row.id}
-            </Typography>
-          </Box>
-        </Box>
-      </TableCell>
-      <TableCell>{row.email}</TableCell>
-      <TableCell>
-        <Chip label={row.role} size="small" />
-      </TableCell>
-      <TableCell>
-        <IconButton>
-          <Verified color={row.status ? "primary" : "error"} />
-        </IconButton>
-      </TableCell>
-      <TableCell>
-        <DatatableActionButton>
-          {/* create a custom component for menu item */}
-          <MenuItem>
-            <ListItemIcon>
-              <Edit fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Edit</ListItemText>
-          </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <Delete fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Delete</ListItemText>
-          </MenuItem>
-        </DatatableActionButton>
-      </TableCell>
-    </TableRow>
-  ));
-};
-
 export default function Page() {
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const { showSuccessSnackbar } = useShowSnackbar();
+  const handleDelete = () => {
+    showSuccessSnackbar("delete user successfully");
+    setOpenConfirm(false);
+  };
   return (
-    <PageWrapper title={'User List'} breadcrumb={breadcrumb} actionButton={<AddButton label={'Add new user'}/>}>
+    <PageWrapper
+      title={"User List"}
+      breadcrumb={breadcrumb}
+      actionButton={
+        <Link href={"/user/create"}>
+          <AddButton label={"Add new user"} />
+        </Link>
+      }
+    >
       <Card>
-      <Box p={2} display={"flex"} gap={1}>
-        <FormControl sx={{ width: "150px" }}>
-          <InputLabel>Role</InputLabel>
-          <Select value={""} label="role">
-            <MenuItem value={10}>All</MenuItem>
-            <MenuItem value={20}>Admin</MenuItem>
-            <MenuItem value={30}>User</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ width: "125px" }}>
-          <InputLabel>Status</InputLabel>
-          <Select value={""} label="Status">
-            <MenuItem value={10}>Active</MenuItem>
-            <MenuItem value={20}>Not Active</MenuItem>
-          </Select>
-        </FormControl>
-        <SearchInput width={"350px"} placeholder={"Search name or id ..."} />
-      </Box>
+        <Box p={2} display={"flex"} gap={1}>
+          <FormControl sx={{ width: "150px" }}>
+            <InputLabel>Role</InputLabel>
+            <Select value={""} label="role">
+              <MenuItem value={10}>All</MenuItem>
+              <MenuItem value={20}>Admin</MenuItem>
+              <MenuItem value={30}>User</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ width: "125px" }}>
+            <InputLabel>Status</InputLabel>
+            <Select value={""} label="Status">
+              <MenuItem value={10}>Active</MenuItem>
+              <MenuItem value={20}>Not Active</MenuItem>
+            </Select>
+          </FormControl>
+          <SearchInput width={"350px"} placeholder={"Search name or id ..."} />
+        </Box>
 
-      <MainTable headers={headers}>{renderRows()}</MainTable>
+        <MainTable headers={headers}>
+          {users?.map((row) => (
+            <TableRow
+              key={row.id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                <Box display={"flex"} alignItems={"center"} gap={1.5}>
+                  <Avatar sx={{ width: 40, height: 40 }} />
+                  <Box>
+                    <Typography fontSize={14} fontWeight={600}>
+                      {row.name}
+                    </Typography>
+                    <Typography fontSize={12} color="text.secondary">
+                      {row.id}
+                    </Typography>
+                  </Box>
+                </Box>
+              </TableCell>
+              <TableCell>{row.email}</TableCell>
+              <TableCell>
+                <Chip label={row.role} size="small" />
+              </TableCell>
+              <TableCell>
+                <IconButton>
+                  <Verified color={row.status ? "primary" : "error"} />
+                </IconButton>
+              </TableCell>
+              <TableCell>
+                <DatatableActionButton>
+                  {/* create a custom component for menu item */}
+                  <Link href={'/user/create'}>
+                  <MenuItem>
+                    <ListItemIcon>
+                      <Edit fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Edit</ListItemText>
+                  </MenuItem></Link>
+                  <MenuItem onClick={() => setOpenConfirm(true)}>
+                    <ListItemIcon>
+                      <Delete fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                  </MenuItem>
+                </DatatableActionButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </MainTable>
 
-      <TablePagination
-        component="div"
-        count={100}
-        page={1}
-        onPageChange={() => console.log("oke")}
-        rowsPerPage={10}
-        onRowsPerPageChange={() => console.log("oke")}
+        <TablePagination
+          component="div"
+          count={100}
+          page={1}
+          onPageChange={() => console.log("oke")}
+          rowsPerPage={10}
+          onRowsPerPageChange={() => console.log("oke")}
+        />
+      </Card>
+      <ConfirmDialog
+        title={"Delete User"}
+        description={
+          "Are you sure to delete this User? this role will be lost and can't recovery."
+        }
+        open={openConfirm}
+        handleClose={() => setOpenConfirm(false)}
+        action={() => handleDelete()}
+        loading={false}
       />
-    </Card>
     </PageWrapper>
   );
 }

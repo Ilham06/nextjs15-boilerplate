@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import { Add, ArrowBack, ArrowBackIos } from "@mui/icons-material";
-import { Box, Breadcrumbs, Button, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Button, Container, Typography } from "@mui/material";
 import Link from "next/link";
 import React from "react";
 
@@ -11,7 +11,7 @@ export default function PageWrapper({
   breadcrumb,
 }) {
   return (
-    <Box>
+    <Container maxWidth="xl">
       <Box
         p={2}
         display={"flex"}
@@ -28,6 +28,6 @@ export default function PageWrapper({
         {actionButton}
       </Box>
       {children}
-    </Box>
+    </Container>
   );
 }
