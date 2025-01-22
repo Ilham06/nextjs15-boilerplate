@@ -117,7 +117,7 @@ project/
 ├── next.config.js               # Configuration file for Next.js settings and plugins.
 ├── package.json                 # NPM package file, lists dependencies and scripts.
 ├── tsconfig.json                # TypeScript configuration file for the project.
-
+```
 
 ## Library
 1. [Mui](https://mui.com) - UI Kit
