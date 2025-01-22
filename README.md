@@ -31,6 +31,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Folder Structur
 
+```plaintext
 project/
 ├── public/
 │   ├── favicon.ico              # The website icon displayed in the browser tab.
